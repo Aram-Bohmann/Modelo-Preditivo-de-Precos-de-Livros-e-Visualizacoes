@@ -1,0 +1,29 @@
+[project]
+name = "lebits"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "aram",email = "xboxaramxbox@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "pandas (>=2.3.3,<3.0.0)",
+    "scikit-learn (>=1.7.2,<2.0.0)",
+    "streamlit (>=1.51.0,<2.0.0)",
+    "matplotlib (>=3.10.7,<4.0.0)",
+    "numpy (>=2.3.5,<3.0.0)",
+    "scipy (>=1.16.3,<2.0.0)"
+]
+
+[tool.poetry]
+packages = [{include = "lebits", from = "src"}]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[dependency-groups]
+dev = [
+    "ipykernel (>=7.1.0,<8.0.0)"
+]
