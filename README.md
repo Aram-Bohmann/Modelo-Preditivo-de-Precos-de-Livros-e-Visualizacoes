@@ -20,4 +20,4 @@ Para realizar o dowloand do repositório, basta baixar os arquivos de seu intere
 O dataset utilizado pode ser encontrado neste outro repositório do github: https://github.com/scostap/goodreads_bbe_dataset
 
 ## TCC
-Se quiser ver o trabalho completo, com a descrição dos códigos, criação do banco de dados e de um aplicativo funcional, acesse meu LinkedIn e aproveite!
+Se quiser ver o trabalho completo, com a descrição dos códigos, criação do banco de dados e de um aplicativo funcional, acesse [aqui](https://github.com/Aram-Bohmann/TCC-Aplicacao-Movel-de-Literatura-Digital) e aproveite!
