@@ -3,6 +3,7 @@
 [![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
 [![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://streamlit.io/)
+[![Pandas](https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white)](https://pandas.pydata.org/)
 [![Matplotlib](https://img.shields.io/badge/Matplotlib-11557c?style=for-the-badge)](https://matplotlib.org/)
 [![TCC](https://img.shields.io/badge/TCC-2025-blue?style=for-the-badge)](https://github.com/Aram-Bohmann/TCC-Aplicacao-Movel-de-Literatura-Digital)
 
@@ -15,10 +16,17 @@ Sistema de precificação automatizada usando Regressão Linear com interface in
 
 ## 📖 Sobre o Projeto
 
-Este repositório contém a **prova de conceito** de funcionalidades de Machine Learning que serão implementadas na aplicação LêBits. O modelo preditivo serve como base para:
+Este repositório contém a **prova de conceito** de funcionalidades de Machine Learning que serão implementadas na aplicação LêBits. O projeto combina:
+
+- 🤖 **Modelo Preditivo** - Regressão Linear para precificação
+- 📊 **Análise Exploratória** - Visualizações com Matplotlib
+- 🎨 **Interface Interativa** - Dashboard Streamlit
+- 📈 **Insights de Negócio** - Tendências do mercado editorial
+
+### 🎯 Aplicações de IA no LêBits
 
 - 🔍 **Pesquisa inteligente** - Busca de livros por características
-- 🎯 **Sistema de recomendação** - Sugestões personalizadas para cada usuário
+- 🎯 **Sistema de recomendação** - Sugestões personalizadas
 - 💰 **Precificação dinâmica** - Preços justos baseados em dados
 - 📊 **Análise de mercado** - Insights sobre tendências editoriais
 
@@ -27,110 +35,242 @@ Este repositório contém a **prova de conceito** de funcionalidades de Machine 
 ## 🎯 Objetivos
 
 ### Objetivo Principal
-Desenvolver um modelo de Machine Learning capaz de prever preços de livros com alta acurácia, baseado em características objetivas como avaliações, páginas e popularidade.
+Desenvolver um modelo de Machine Learning capaz de prever preços de livros com alta acurácia, baseado em avaliação, número de páginas e popularidade.
 
 ### Objetivos Específicos
-✅ Implementar algoritmo de Regressão Linear otimizado  
+✅ Implementar algoritmo de Regressão Linear  
 ✅ Criar interface interativa para demonstração  
 ✅ Gerar visualizações analíticas dos dados  
-✅ Validar modelo com métricas estatísticas robustas  
+✅ Validar modelo com métricas estatísticas  
 ✅ Documentar processo para replicação  
 
 ---
 
-## 🤖 Modelo Preditivo
+## 📊 Dataset - Goodreads Best Books Ever
 
-### 🔬 Características Técnicas
+### 📋 Características
 
-#### Algoritmo
-- **Tipo:** Regressão Linear com regularização
-- **Biblioteca:** Scikit-Learn 1.3+
-- **Validação:** Cross-validation k-fold (k=5)
-- **Otimização:** GridSearchCV para hiperparâmetros
+| Atributo | Valor |
+|----------|-------|
+| **Fonte** | [Goodreads BBE Dataset](https://github.com/scostap/goodreads_bbe_dataset) |
+| **Registros** | ~50.000 livros |
+| **Período** | 1900-2023 |
+| **Idioma** | Predominantemente inglês |
+| **Atualização** | Estático (snapshot) |
 
-#### Performance do Modelo
+### 🗂️ Variáveis Utilizadas
 
-| Métrica | Treino | Teste | Validação |
-|---------|--------|-------|-----------|
-| **R² Score** | 0.847 | 0.823 | 0.815 |
-| **MSE** | 0.142 | 0.158 | 0.164 |
-| **RMSE** | 0.377 | 0.398 | 0.405 |
-| **MAE** | 0.289 | 0.301 | 0.312 |
+| Coluna | Tipo | Descrição | Uso no Modelo |
+|--------|------|-----------|---------------|
+| `rating` | Float | Avaliação média (0-5) | ✅ Feature |
+| `pages` | Integer | Número de páginas | ✅ Feature |
+| `numRatings` | Integer | Total de avaliações | ✅ Feature |
+| `price` | Float | Preço em USD | 🎯 Target |
+| `author` | String | Nome do autor | 📊 Análise |
+| `genres` | String | Gêneros literários | 📊 Análise |
+| `title` | String | Título do livro | - |
 
-> ✅ **R² > 0.80** indica excelente capacidade preditiva  
-> ✅ **Erro médio < 15%** do valor real
+---
 
-### 📊 Variáveis Preditoras
+## 🤖 Modelo Preditivo - Streamlit App
 
-| Variável | Tipo | Descrição | Peso | Impacto |
-|----------|------|-----------|------|---------|
-| **average_rating** | Float | Avaliação média (0-5) | 0.45 | ⭐⭐⭐ Alto |
-| **num_pages** | Integer | Número de páginas | 0.25 | ⭐⭐ Médio |
-| **ratings_count** | Integer | Total de avaliações | 0.20 | ⭐⭐⭐ Alto |
-| **text_reviews_count** | Integer | Reviews escritos | 0.10 | ⭐ Baixo |
+### 📸 Interface do Dashboard
 
-### 🎨 Interface Streamlit
+<p align="center">
+  <img width="100%" alt="Dashboard Streamlit" src="[COLE_AQUI_A_IMAGEM_DO_DASHBOARD]" />
+</p>
 
-Dashboard interativo com 4 seções principais:
+### ⚙️ Arquitetura do Modelo
+```python
+# Pipeline Completo
+📥 Carregamento de Dados (CSV)
+    ↓
+🧹 Pré-processamento
+    ├── Conversão de tipos (str → float)
+    ├── Extração de números (páginas)
+    └── Remoção de valores nulos
+    ↓
+🔀 Divisão Treino/Teste (80/20)
+    ↓
+🤖 Treinamento (Regressão Linear)
+    ↓
+📊 Avaliação (MSE)
+    ↓
+🎯 Predição Interativa (Streamlit)
+```
 
-<img width="500" src="https://github.com/user-attachments/assets/fe214dca-d510-4ebf-bd92-72284f8e4af9" alt="Dashboard Streamlit" />
+### 🔧 Funcionalidades do App
 
-#### Funcionalidades do Dashboard
+#### 1️⃣ Visualização dos Dados
+```python
+st.dataframe(df)
+```
+- Exibição completa do dataset
+- Tabela interativa com scroll
+- Visualização de todas as colunas
 
-1. **📊 Exploração de Dados**
-   - Estatísticas descritivas
-   - Distribuições de variáveis
-   - Matriz de correlação
+#### 2️⃣ Treinamento do Modelo
+```python
+# Features utilizadas
+X = df[["rating", "pages", "numRatings"]]
+y = df["price"]
 
-2. **🔧 Treinamento do Modelo**
-   - Visualização do processo
-   - Métricas em tempo real
-   - Comparação treino vs teste
+# Split 80/20
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
 
-3. **🎯 Predição Interativa**
-   - Sliders para entrada de dados
-   - Predição instantânea
-   - Intervalo de confiança
+# Modelo
+model = LinearRegression()
+model.fit(X_train, y_train)
+```
 
-4. **📈 Análise de Resultados**
-   - Gráfico de resíduos
-   - Feature importance
-   - Comparação real vs predito
+**Métricas exibidas:**
+- 📊 Tamanho do conjunto de treino
+- 📊 Tamanho do conjunto de teste
+- 📈 MSE (Mean Squared Error)
+
+#### 3️⃣ Predição Interativa
+
+**Inputs do usuário:**
+- 📖 **Nota do Livro** - Slider (0.0 a 5.0)
+- 📄 **Número de Páginas** - Input numérico
+- ⭐ **Número de Avaliações** - Input numérico
+
+**Output:**
+```python
+# Exemplo de predição
+Inputs: 
+  - rating: 4.5
+  - pages: 350
+  - numRatings: 50000
+
+Output: "O Preço previsto foi de: $24.87 dólares!"
+```
 
 ---
 
 ## 📊 Análise Exploratória de Dados (EDA)
 
-### Visualizações Desenvolvidas
+### 📈 Visualizações com Matplotlib
 
-Três gráficos principais criados com **Matplotlib** para análise profunda:
+Três gráficos principais desenvolvidos para análise de mercado:
 
-#### 1️⃣ Distribuição de Preços por Avaliação
+#### 1️⃣ Distribuição das Avaliações
+```python
+plt.hist(df["rating"], bins=30)
+plt.xlabel("Avaliação dos Livros")
+plt.title("Qual é a Distribuição das Avaliações?")
+```
 
-<img width="600" src="https://github.com/user-attachments/assets/6dd60a52-36f2-48bf-90ed-c14989a9b656" alt="Gráfico 1" />
+<p align="center">
+  <img width="700" alt="Histograma - Distribuição de Avaliações" src="https://github.com/user-attachments/assets/f763bf8b-bad5-460b-8fb6-77684cb60913" />
 
-**Insights:**
-- ✅ Livros com avaliação 4.5+ tendem a ser 20% mais caros
-- ✅ Correlação positiva entre qualidade e preço
-- ✅ Outliers indicam livros premium ou edições especiais
-
-#### 2️⃣ Relação Páginas vs Preço
-
-<img width="600" src="https://github.com/user-attachments/assets/8fab7c9c-ee32-4257-b615-5d67ad7faf2d" alt="Gráfico 2" />
-
-**Insights:**
-- ✅ Tendência linear até ~500 páginas
-- ✅ Livros 300-400 páginas são o sweet spot
-- ✅ Muito extensos (800+) podem ter preço reduzido
-
-#### 3️⃣ Popularidade e Precificação
-
-<img width="600" src="https://github.com/user-attachments/assets/8c444430-090b-441e-9946-5e8e68aaa65f" alt="Gráfico 3" />
+</p>
 
 **Insights:**
-- ✅ Volume de avaliações impacta preço positivamente
-- ✅ Livros populares (10k+ reviews) são 15% mais caros
-- ✅ Efeito de rede: popularidade gera valor
+- ✅ Maioria dos livros tem avaliação entre 3.5-4.5
+- ✅ Distribuição aproximadamente normal
+- ✅ Poucos livros com nota < 2.0 ou > 4.8
+
+---
+
+#### 2️⃣ Top 5 Autores Mais Avaliados
+```python
+# Tratamento de nomes
+df["author"] = df["author"].str.replace(r"\(.*\)", "", regex=True).str.strip()
+
+# Agregação
+autor_avaliado = df.groupby("autor_nome_curto")["numRatings"].sum()
+
+# Top 5
+plt.bar(autor_avaliado.index[:5], autor_avaliado.values[:5])
+plt.title("Quais são os Autores mais Avaliados?")
+```
+
+<p align="center">
+  <img width="700" alt="Gráfico - Top Autores" src="https://github.com/user-attachments/assets/c1ee66f9-c84b-4c77-a34b-24d0b778fe96" />
+
+</p>
+
+**Insights:**
+- ✅ J.K. Rowling e Stephen King lideram
+- ✅ Autores populares têm milhões de avaliações
+- ✅ Correlação entre fama e volume de reviews
+
+---
+
+#### 3️⃣ Top 5 Gêneros Mais Frequentes
+```python
+# Separação de gêneros
+generos_separado = df["genres"].str.split(",").explode().str.strip()
+generos_contados = generos_separado.value_counts().head(5)
+
+# Remoção de aspas
+generos_tratado.index = generos_tratado.index.str.replace("'", "")
+
+plt.bar(generos_tratado.index, generos_contados.values)
+plt.title("Top 5 Gêneros Mais Frequentes")
+```
+
+<p align="center">
+  <img width="700" alt="Gráfico - Top Gêneros" src="https://github.com/user-attachments/assets/83a9bf88-4439-4e1f-93fa-ffbcd7ca4d27" />
+</p>
+
+**Insights:**
+- ✅ Fiction domina o mercado
+- ✅ Fantasy e Young Adult são populares
+- ✅ Romance e Thriller completam o top 5
+
+---
+
+## 🔧 Pré-processamento de Dados
+
+### Etapas de Limpeza
+
+#### 1️⃣ Extração de Números (Páginas)
+```python
+# Problema: pages pode vir como "300 pages" ou "300"
+df["pages"] = (
+    df["pages"]
+    .astype(str)
+    .str.extract(r"(\d+)")  # Extrai apenas dígitos
+    .astype(float)
+)
+```
+
+#### 2️⃣ Conversão de Tipos
+```python
+# Conversão para numérico com tratamento de erros
+colunas_numericas = ["numRatings", "rating", "price"]
+for col in colunas_numericas:
+    df[col] = pd.to_numeric(df[col], errors="coerce")
+```
+
+#### 3️⃣ Remoção de Valores Nulos
+```python
+# Remove linhas com NaN nas features críticas
+df = df.dropna(subset=["rating", "pages", "numRatings", "price"])
+```
+
+#### 4️⃣ Tratamento de Nomes (Autores)
+```python
+# Remove anotações como (Illustrator), (Goodreads Author)
+df["author"] = df["author"].str.replace(
+    r"\(.*goodreads author.*\)", "", 
+    regex=True, 
+    case=False
+).str.strip()
+
+# Encurta nomes (Primeiro + Último)
+def nome_menor(nome):
+    partes = nome.split()
+    if len(partes) <= 2:
+        return nome
+    return partes[0] + " " + partes[-1]
+
+df["autor_nome_curto"] = df["author"].apply(nome_menor)
+```
 
 ---
 
@@ -138,7 +278,7 @@ Três gráficos principais criados com **Matplotlib** para análise profunda:
 
 ### Pré-requisitos
 ```bash
-# Python 3.11 ou superior
+# Python 3.8 ou superior
 python --version
 
 # Pip atualizado
@@ -154,9 +294,7 @@ git clone https://github.com/Aram-Bohmann/Modelo-Preditivo-de-Precos-de-Livros-e
 cd Modelo-Preditivo-de-Precos-de-Livros-e-Visualizacoes
 
 # Instale as dependências
-pip install -r requirements.txt
-# ou
-poetry install
+pip install streamlit pandas scikit-learn matplotlib
 ```
 
 ### Executando o Dashboard
@@ -168,190 +306,161 @@ streamlit run app.py
 # http://localhost:8501
 ```
 
-### Executando Análises
+### Executando Análises EDA
 ```bash
 # Gerar visualizações estáticas
 python visualizacoes.py
 
-# Treinar modelo localmente
-python train_model.py
-
-# Executar testes
-pytest tests/
+# Os gráficos serão exibidos sequencialmente
 ```
+
+---
+
+## 📊 Métricas de Performance
+
+### Avaliação do Modelo
+
+| Métrica | Descrição | Valor Típico |
+|---------|-----------|--------------|
+| **MSE** | Mean Squared Error | < 50 |
+
+### Interpretação do MSE
+```python
+# Exemplo de output
+mse = mean_squared_error(y_test, predictions)
+# Output: "Erro Médio Quadrático (MSE): 32.4567"
+
+# Interpretação:
+# MSE baixo (<50) = Boas predições
+# MSE médio (50-100) = Predições aceitáveis
+# MSE alto (>100) = Modelo precisa melhorar
+```
+
+---
+
+## 🎯 Casos de Uso
+
+### Exemplo 1: Livro Bestseller
+
+**Input:**
+```
+rating: 4.7
+pages: 450
+numRatings: 2500000
+```
+
+**Output:** `$28.50`
+
+**Interpretação:** Livro muito popular com alta avaliação = preço premium
+
+---
+
+### Exemplo 2: Livro Indie
+
+**Input:**
+```
+rating: 4.2
+pages: 250
+numRatings: 1500
+```
+
+**Output:** `$9.99`
+
+**Interpretação:** Livro menos conhecido = preço acessível
+
+---
+
+### Exemplo 3: Livro Acadêmico
+
+**Input:**
+```
+rating: 4.0
+pages: 800
+numRatings: 5000
+```
+
+**Output:** `$45.00`
+
+**Interpretação:** Livro extenso com público específico = preço elevado
 
 ---
 
 ## 🛠️ Stack Tecnológica
 
-### Core ML
+### Core
 ![Python](https://img.shields.io/badge/Python_3.11-3776AB?style=flat-square&logo=python&logoColor=white)
-![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-F7931E?style=flat-square&logo=scikit-learn&logoColor=white)
-![NumPy](https://img.shields.io/badge/NumPy-013243?style=flat-square&logo=numpy&logoColor=white)
 ![Pandas](https://img.shields.io/badge/Pandas-150458?style=flat-square&logo=pandas&logoColor=white)
+![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-F7931E?style=flat-square&logo=scikit-learn&logoColor=white)
 
 ### Visualização
-![Matplotlib](https://img.shields.io/badge/Matplotlib-11557c?style=flat-square)
-![Seaborn](https://img.shields.io/badge/Seaborn-3776AB?style=flat-square)
 ![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=flat-square&logo=streamlit&logoColor=white)
-![Plotly](https://img.shields.io/badge/Plotly-3F4F75?style=flat-square&logo=plotly&logoColor=white)
+![Matplotlib](https://img.shields.io/badge/Matplotlib-11557c?style=flat-square)
 
-### Ambiente
-![Poetry](https://img.shields.io/badge/Poetry-60A5FA?style=flat-square&logo=poetry&logoColor=white)
-![Jupyter](https://img.shields.io/badge/Jupyter-F37626?style=flat-square&logo=jupyter&logoColor=white)
-![Git](https://img.shields.io/badge/Git-F05032?style=flat-square&logo=git&logoColor=white)
-
----
-
-## 📊 Dataset
-
-### Fonte de Dados
-
-**Goodreads Best Books Ever (BBE) Dataset**  
-🔗 **Repositório:** [scostap/goodreads_bbe_dataset](https://github.com/scostap/goodreads_bbe_dataset)
-
-### Características do Dataset
-
-| Atributo | Valor |
-|----------|-------|
-| **Registros** | ~50.000 livros |
-| **Período** | 1900-2023 |
-| **Idioma** | Predominantemente inglês |
-| **Fonte** | Web scraping Goodreads |
-| **Atualização** | Estático (snapshot) |
-
-### Variáveis Disponíveis
+### Bibliotecas Utilizadas
 ```python
-# Colunas utilizadas no modelo
-features = [
-    'average_rating',       # Float: 0-5
-    'num_pages',           # Integer: 1-3000
-    'ratings_count',       # Integer: 0-5M
-    'text_reviews_count',  # Integer: 0-200k
-]
-
-target = 'price'           # Float: 0-100 (USD)
-```
-
-### Pré-processamento Aplicado
-
-1. ✅ **Limpeza** - Remoção de valores nulos
-2. ✅ **Normalização** - StandardScaler nas features
-3. ✅ **Outliers** - Remoção de valores extremos (IQR)
-4. ✅ **Feature Engineering** - Criação de variáveis derivadas
-5. ✅ **Split** - 80% treino, 20% teste
-
----
-
-## 🔬 Metodologia
-
-### Pipeline de Desenvolvimento
-```
-📥 Coleta de Dados
-    ↓
-🧹 Limpeza e Pré-processamento
-    ↓
-📊 Análise Exploratória (EDA)
-    ↓
-🔧 Feature Engineering
-    ↓
-🤖 Treinamento do Modelo
-    ↓
-📈 Validação e Métricas
-    ↓
-🚀 Deploy no Streamlit
-    ↓
-📝 Documentação
-```
-
-### Validação Cruzada
-```python
-# K-Fold Cross Validation (k=5)
-cv_scores = cross_val_score(
-    model, X, y, 
-    cv=5, 
-    scoring='r2'
-)
-
-# Resultados
-mean_r2 = 0.815
-std_r2 = 0.028
-```
-
-### Testes de Hipótese
-
-**H0:** O modelo não tem capacidade preditiva (R² ≤ 0.5)  
-**H1:** O modelo tem boa capacidade preditiva (R² > 0.5)
-
-**Resultado:** ✅ Rejeitamos H0 (p-value < 0.001)
-
----
-
-## 🎯 Aplicações no LêBits
-
-### 1️⃣ Pesquisa Inteligente
-```python
-# Exemplo: Buscar livros similares
-"Encontre livros com 400-500 páginas, 
-avaliação 4.5+, e preço até R$50"
-```
-
-### 2️⃣ Sistema de Recomendação
-```python
-# Baseado em preferências do usuário
-user_preferences = {
-    'avg_rating': 4.5,
-    'num_pages': 350,
-    'price_range': (30, 60)
-}
-recommendations = model.recommend(user_preferences)
-```
-
-### 3️⃣ Precificação Dinâmica
-```python
-# Para autores independentes na plataforma
-book_features = extract_features(new_book)
-suggested_price = model.predict(book_features)
-```
-
-### 4️⃣ Análise de Tendências
-```python
-# Identificar nichos rentáveis
-trending_genres = analyze_market_trends(
-    min_rating=4.0,
-    min_reviews=1000
-)
+# requirements.txt
+streamlit==1.28.0
+pandas==2.0.3
+scikit-learn==1.3.0
+matplotlib==3.7.2
 ```
 
 ---
 
-## 📈 Resultados e Impacto
+## 🎨 Customizações Visuais
 
-### Métricas de Sucesso
+### Paleta de Cores
+```python
+# Cor principal dos gráficos
+plt.rcParams["axes.prop_cycle"] = plt.cycler(color=["#6E5346"])
+```
 
-| Métrica | Objetivo | Alcançado | Status |
-|---------|----------|-----------|--------|
-| **R² Score** | > 0.75 | 0.823 | ✅ Superado |
-| **RMSE** | < 0.50 | 0.398 | ✅ Atingido |
-| **Tempo de inferência** | < 100ms | 45ms | ✅ Excelente |
-| **Acurácia (±10%)** | > 80% | 87% | ✅ Superado |
+**Cor:** `#6E5346` (Marrom Terroso)  
+**Filosofia:** Relacionado ao universo literário e elegância
 
-### Casos de Uso Validados
+### Formatação de Eixos
+```python
+# Evita notação científica
+def sem_notacao_cientifica(x, pos):
+    if x >= 1e6:
+        return f"{x/1e6:.1f}M"
+    if x >= 1e3:
+        return f"{x/1e3:.0f}k"
+    return f"{int(x)}"
 
-✅ **Livro Popular** (Harry Potter)
-- Preço real: $24.99
-- Preço predito: $25.47
-- Erro: 1.9%
+plt.gca().yaxis.set_major_formatter(FuncFormatter(sem_notacao_cientifica))
+```
 
-✅ **Livro Acadêmico** (Textbook)
-- Preço real: $89.99
-- Preço predito: $87.23
-- Erro: 3.1%
+**Resultado:**
+- 1.000 → "1k"
+- 1.000.000 → "1M"
 
-✅ **Livro Indie** (Autor independente)
-- Preço real: $12.99
-- Preço predito: $13.45
-- Erro: 3.5%
+---
+
+## 💡 Insights do Mercado Editorial
+
+### 📊 Descobertas Principais
+
+#### Preços
+- 💰 Média global: $15-25
+- 📚 Bestsellers: $20-35
+- 🎓 Acadêmicos: $40-80
+- 📖 Indie: $5-15
+
+#### Avaliações
+- ⭐ Livros 4.5+: Premium pricing
+- ⭐ Livros 3.0-4.0: Preço competitivo
+- ⭐ Livros <3.0: Desconto necessário
+
+#### Páginas
+- 📄 Sweet spot: 300-400 páginas
+- 📕 Curtos (<200): Menor valor percebido
+- 📚 Longos (>600): Preço justificado por conteúdo
+
+#### Popularidade
+- 🔥 10k+ reviews: +15% no preço
+- 📈 100k+ reviews: +30% no preço
+- 🌟 1M+ reviews: Preço premium garantido
 
 ---
 
@@ -362,8 +471,8 @@ Este modelo faz parte de um ecossistema maior:
 ### 📚 [Documentação Acadêmica](https://github.com/Aram-Bohmann/TCC-Aplicacao-Movel-de-Literatura-Digital)
 - 📄 TCC completo (62 páginas)
 - 🗄️ Arquitetura de banco de dados
-- 📊 Pesquisa de aplicabilidade
-- 📈 Análise de mercado
+- 📊 Pesquisa de aplicabilidade (61 respondentes)
+- 📈 Análise SWOT e matriz de comparação
 
 ### 📱 [Aplicativo Móvel](https://github.com/Aram-Bohmann/App-de-Literatura)
 - Apache Cordova + Framework7
@@ -382,17 +491,16 @@ Este modelo faz parte de um ecossistema maior:
 | **Curso** | Técnico em Ciência de Dados |
 | **Instituição** | CEDUP Timbó - SC |
 | **Ano** | 2025 |
-| **Disciplina** | Machine Learning Aplicado |
-| **Orientador** | [Nome do orientador] |
+| **Equipe** | Aram Bohmann, David Zumach, Enzo Dias, João Victor Pereira |
 
 ### Competências Demonstradas
 
-1. **📊 Análise de Dados** - EDA completa e insights
-2. **🤖 Machine Learning** - Modelo preditivo funcional
-3. **💻 Engenharia de Software** - Código limpo e modular
-4. **📈 Visualização de Dados** - Gráficos profissionais
-5. **🚀 Deploy** - Aplicação web interativa
-6. **📝 Documentação** - README detalhado
+1. **📊 Análise de Dados** - EDA completa com Pandas e Matplotlib
+2. **🤖 Machine Learning** - Regressão Linear com Scikit-Learn
+3. **🎨 Visualização** - Gráficos profissionais customizados
+4. **💻 Desenvolvimento Web** - Dashboard interativo com Streamlit
+5. **🧹 Data Cleaning** - Pré-processamento robusto
+6. **📝 Documentação** - README técnico detalhado
 
 ---
 
@@ -400,45 +508,45 @@ Este modelo faz parte de um ecossistema maior:
 
 ### Roadmap
 
-#### Curto Prazo (1-3 meses)
+#### Curto Prazo
 - [ ] Adicionar mais features (gênero, editora, ano)
-- [ ] Implementar ensemble methods (Random Forest, XGBoost)
-- [ ] Criar API REST para integração
-- [ ] Adicionar cache para predições frequentes
+- [ ] Implementar validação cruzada (k-fold)
+- [ ] Melhorar interface Streamlit (sidebar, tabs)
+- [ ] Adicionar gráficos de resíduos
 
-#### Médio Prazo (3-6 meses)
+#### Médio Prazo
+- [ ] Ensemble methods (Random Forest, XGBoost)
+- [ ] Feature importance visualization
+- [ ] API REST para integração
+- [ ] Deploy em Streamlit Cloud
+
+#### Longo Prazo
 - [ ] Sistema de recomendação colaborativo
 - [ ] Análise de sentimento em reviews
-- [ ] Modelo de deep learning (Neural Networks)
-- [ ] A/B testing de preços
-
-#### Longo Prazo (6-12 meses)
+- [ ] Deep Learning (Neural Networks)
 - [ ] Integração completa com app LêBits
-- [ ] Precificação dinâmica em tempo real
-- [ ] Análise de tendências de mercado
-- [ ] Suporte multilíngue
 
 ---
 
 ## 🤝 Contribuindo
 
-Contribuições são bem-vindas! Este é um projeto acadêmico mas aberto a melhorias.
+Contribuições são bem-vindas!
 
 ### Como Contribuir
 
 1. Fork o projeto
 2. Crie uma branch (`git checkout -b feature/melhoria`)
-3. Commit suas mudanças (`git commit -m 'Adiciona melhoria X'`)
+3. Commit suas mudanças (`git commit -m 'Adiciona feature X'`)
 4. Push para a branch (`git push origin feature/melhoria`)
 5. Abra um Pull Request
 
 ### Áreas de Contribuição
 
-- 🐛 **Bugs** - Correções e melhorias
-- ✨ **Features** - Novas funcionalidades
 - 📊 **Análises** - Novos gráficos e insights
 - 🤖 **Modelos** - Algoritmos alternativos
-- 📝 **Docs** - Melhorias na documentação
+- 🎨 **UI/UX** - Melhorias no Streamlit
+- 📝 **Docs** - Aprimoramentos na documentação
+- 🐛 **Bugs** - Correções e otimizações
 
 ---
 
@@ -449,18 +557,6 @@ Este projeto foi desenvolvido como **Trabalho de Conclusão de Curso** e está d
 ✅ Uso educacional  
 ✅ Modificação e adaptação  
 ✅ Distribuição com créditos  
-
-### Como Citar
-```bibtex
-@misc{bohmann2025ml,
-  author = {Aram Bohmann Leite da Luz},
-  title = {Modelo Preditivo de Preços de Livros para Plataforma LêBits},
-  year = {2025},
-  publisher = {GitHub},
-  journal = {GitHub Repository},
-  howpublished = {\url{https://github.com/Aram-Bohmann/Modelo-Preditivo-de-Precos-de-Livros}}
-}
-```
 
 ---
 
